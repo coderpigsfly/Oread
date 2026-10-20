@@ -131,9 +131,11 @@ and start with Moonshine or Zipformer.
 
 ## Tested devices
 
-- **Home Assistant Voice PE**, as itself (the `voice-pe` device in the tests).
-- **A low-end EcoPad Android tablet** running **Ava Pro**, which connects it
-  to Home Assistant (the `tablet` device in the tests).
+- **[Home Assistant Voice PE](https://www.home-assistant.io/voice-pe/)**, as itself
+  (the `voice-pe` device in the tests).
+- **A low-end EcoPad Android tablet** running **[Ava Pro](https://github.com/knoop7/Ava-Pro)**,
+  which connects it to [Home Assistant](https://github.com/home-assistant/core)
+  (the `tablet` device in the tests).
 - **A Lenovo IdeaPad running Ubuntu 24.04**, its own microphone through
   `tools/client.py` (the `laptop` device in the tests).
 

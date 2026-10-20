@@ -469,6 +469,6 @@ are never in git: back them up with keys/ instead. A release never ships anythin
 Set `public:` (the public repo's address) and `version:` in release.yaml when you're ready. The
 public history starts at the first release.
 
-Oread's own version is `__version__` in `oread/__init__.py` (1.0.0 since Oct 14). It's what its
+Oread's own version is `__version__` in `oread/__init__.py` (1.0.1 since Oct 20). It's what its
 OpenAPI document says, so the house router notices an update; change it with every release, and
 keep release.yaml's `version:` the same.

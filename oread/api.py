@@ -873,7 +873,7 @@ def build_app(store: Store, tuning: Tuning, devices: DeviceManager, tokens: Toke
 
     @app.get("/ospri", tags=["ospri"], summary="OSPRI: whether records are gathered, how many, over which dates")
     def ospri_view():
-        """OSPRI in v1.0.0 only gathers a record of each request and exports them; the analysis comes in 1.1.0."""
+        """OSPRI in v1.0 only gathers a record of each request and exports them; applying corrections (OSPRI lite) comes in 1.1.0."""
         if records is None:
             raise HTTPException(status_code=404, detail="Not running here")
         return records.view()
