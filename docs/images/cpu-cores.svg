@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" width="720" height="420" role="img" aria-labelledby="t d">
+<title id="t">Time per command by CPU cores</title>
+<desc id="d">Seconds per short command with Oread limited to 1, 2 and 4 cores. Moonshine: 3.2, 1.3 and 0.40 s. Parakeet: 10.9, 3.5 and 1.28 s.</desc>
+<style>
+  .bg { fill: #fcfcfb; } .ink { fill: #0b0b0b; } .ink2 { fill: #52514e; }
+  .grid { stroke: #e4e3df; } .axis { stroke: #b9b8b2; }
+  .s1 { fill: #2a78d6; stroke: #2a78d6; } .s2 { fill: #eb6834; stroke: #eb6834; }
+  .rule { stroke: #8a8984; }
+  @media (prefers-color-scheme: dark) {
+    .bg { fill: #1a1a19; } .ink { fill: #f0efec; } .ink2 { fill: #c3c2b7; }
+    .grid { stroke: #2e2e2c; } .axis { stroke: #55554f; }
+    .s1 { fill: #3987e5; stroke: #3987e5; } .s2 { fill: #d95926; stroke: #d95926; }
+    .rule { stroke: #8f8e88; }
+  }
+  .line { fill: none; }   /* after the dark colours, so a line is never filled */
+  text { font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+</style>
+<rect class="bg" width="720" height="420" rx="8"/>
+<text class="ink" x="70" y="30" font-size="17" font-weight="600">Time per command by CPU cores</text>
+<text class="ink2" x="70" y="50" font-size="13">Oread limited by Docker on the same Xeon VM without AVX2, 15 household commands.</text>
+<line class="grid" x1="70" x2="600" y1="360.0" y2="360.0"/>
+<text class="ink2" x="62" y="364.0" font-size="12" text-anchor="end">0 s</text>
+<line class="grid" x1="70" x2="600" y1="311.7" y2="311.7"/>
+<text class="ink2" x="62" y="315.7" font-size="12" text-anchor="end">2 s</text>
+<line class="grid" x1="70" x2="600" y1="263.3" y2="263.3"/>
+<text class="ink2" x="62" y="267.3" font-size="12" text-anchor="end">4 s</text>
+<line class="grid" x1="70" x2="600" y1="215.0" y2="215.0"/>
+<text class="ink2" x="62" y="219.0" font-size="12" text-anchor="end">6 s</text>
+<line class="grid" x1="70" x2="600" y1="166.7" y2="166.7"/>
+<text class="ink2" x="62" y="170.7" font-size="12" text-anchor="end">8 s</text>
+<line class="grid" x1="70" x2="600" y1="118.3" y2="118.3"/>
+<text class="ink2" x="62" y="122.3" font-size="12" text-anchor="end">10 s</text>
+<line class="grid" x1="70" x2="600" y1="70.0" y2="70.0"/>
+<text class="ink2" x="62" y="74.0" font-size="12" text-anchor="end">12 s</text>
+<text class="ink2" x="107.9" y="380" font-size="12" text-anchor="middle">1</text>
+<text class="ink2" x="259.3" y="380" font-size="12" text-anchor="middle">2</text>
+<text class="ink2" x="562.1" y="380" font-size="12" text-anchor="middle">4</text>
+<line class="axis" x1="70" x2="600" y1="360" y2="360"/>
+<text class="ink2" x="335" y="408" font-size="12" text-anchor="middle">CPU cores</text>
+<text class="ink2" x="18" y="215" font-size="12" text-anchor="middle" transform="rotate(-90 18 215)">Seconds per command</text>
+<polyline class="s1 line" points="107.9,282.7 259.3,328.6 562.1,350.3" stroke-width="2"/>
+<circle class="s1" cx="107.9" cy="282.7" r="5"/>
+<text class="ink2" x="117.9" y="274.7" font-size="12" text-anchor="start">3.2 s</text>
+<circle class="s1" cx="259.3" cy="328.6" r="5"/>
+<text class="ink2" x="269.3" y="320.6" font-size="12" text-anchor="start">1.3 s</text>
+<circle class="s1" cx="562.1" cy="350.3" r="5"/>
+<text class="ink2" x="552.1" y="342.3" font-size="12" text-anchor="end">0.4 s</text>
+<text class="ink" x="576.1" y="354.3" font-size="13" font-weight="600">Moonshine</text>
+<polyline class="s2 line" points="107.9,96.6 259.3,275.4 562.1,329.1" stroke-width="2"/>
+<circle class="s2" cx="107.9" cy="96.6" r="5"/>
+<text class="ink2" x="117.9" y="88.6" font-size="12" text-anchor="start">10.9 s</text>
+<circle class="s2" cx="259.3" cy="275.4" r="5"/>
+<text class="ink2" x="269.3" y="267.4" font-size="12" text-anchor="start">3.5 s</text>
+<circle class="s2" cx="562.1" cy="329.1" r="5"/>
+<text class="ink2" x="552.1" y="321.1" font-size="12" text-anchor="end">1.28 s</text>
+<text class="ink" x="576.1" y="333.1" font-size="13" font-weight="600">Parakeet</text>
+</svg>

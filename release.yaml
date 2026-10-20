@@ -1,0 +1,26 @@
+# release.yaml - what goes from this development repo (private) to the public one.
+# Only tools/release.py publishes, and only after showing you what goes out and asking.
+#   python3 tools/release.py --check    see what would go out; nothing is published
+#   python3 tools/release.py            publish (asks first)
+# Public at github.com/coderpigsfly/oread.
+
+version: 1.0.0            # the next public release; tagged v1.0.0 there, release-v1.0.0 here
+public: git@github.com:coderpigsfly/oread.git   # the public repo
+branch: main              # the public repo's branch
+email: 20612498+coderpigsfly@users.noreply.github.com   # the public commits' email (GitHub's noreply: your own stays private)
+
+# Never published (a folder ends with /). Your household's own Oread lives in data/ (voices,
+# clips, the vault, your own settings): git never has it, and it's listed here as well so a
+# release can't carry it even if it were ever added.
+never:
+  - data/
+  - keys/
+  - logs/
+  - models/
+  - .env
+  - tools/textlen.py        # measures the pages' text: for development only
+
+keep:                     # published even though never: covers them: the empty folders a new install needs
+  - "*/.keep"
+
+skeletons: ""             # none: settings.yaml, models.yaml and device-types.yaml are the shipped ones; yours are in data/

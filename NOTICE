@@ -1,0 +1,26 @@
+Oread
+Copyright 2026 coderpigsfly
+
+Licensed under the Apache License, Version 2.0 (see LICENSE).
+
+This product uses sherpa-onnx (https://github.com/k2-fsa/sherpa-onnx),
+copyright the sherpa-onnx authors, licensed under the Apache License,
+Version 2.0.
+
+Speech-to-text and speaker recognition models are not included in this
+repository. Each model Oread uses carries its own license, listed in the
+README. The default speech-to-text model is Moonshine base by Useful
+Sensors (MIT License); NVIDIA Parakeet TDT 0.6B v2 (CC BY 4.0) is offered
+as an option. The default voiceprint model is NVIDIA TitaNet Small, covered
+by the NeMo toolkit license (Apache License 2.0).
+
+The Explore page bundles jQuery 3.7.1 and jQuery UI 1.13.3 (copyright OpenJS
+Foundation and other contributors) and PivotTable.js 2.23.0 (copyright 2012
+Nicolas Kruchten, Datacratic, other contributors), each under the MIT License;
+their license texts are in oread/web/vendor/LICENSES.md.
+
+The test clips in tests/audio/ (librispeech-0, -1 and -2) and the sample
+household's clips in sample/clips/ (read by LibriSpeech speakers 4446, 61 and
+1580; see sample/sample.yaml) come from the LibriSpeech corpus (Panayotov et al.,
+https://www.openslr.org/12), licensed under CC BY 4.0. They are unchanged apart
+from conversion from FLAC to WAV.

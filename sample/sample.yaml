@@ -1,0 +1,51 @@
+# The sample household: short clips read by three LibriSpeech volunteers (test-clean,
+# https://www.openslr.org/12, CC BY 4.0, Panayotov et al.). Settings › Sample household adds and removes it.
+# teach: assigned to its person when added. waiting: left on the Learn page for Oread to guess.
+# The names are the sample's own; reader: the LibriSpeech speaker (its number and name in SPEAKERS.TXT).
+
+readers:
+  "4446": "Jen Maxwell"
+  "61": "Paul-Gabriel Wiener"
+  "1580": "TinyPines"
+
+clips:
+  - {file: 4446-2271-0000.wav, reader: "4446", person: Sample Ada, role: teach}
+    # "Mainhall liked alexander because he was an engineer"
+  - {file: 4446-2271-0012.wav, reader: "4446", person: Sample Ada, role: teach}
+    # "I say sir harry the little girl's going famously to night isn't she"
+  - {file: 4446-2271-0024.wav, reader: "4446", person: Sample Ada, role: teach}
+    # "I shouldn't wonder if she could laugh about it with me now"
+  - {file: 4446-2273-0009.wav, reader: "4446", person: Sample Ada, role: teach}
+    # "It's not particularly rare she said but some of it was my mother's"
+  - {file: 4446-2273-0024.wav, reader: "4446", person: Sample Ada, role: teach}
+    # "Bartley started when hilda rang the little bell beside her dear me why did you do that"
+  - {file: 4446-2273-0034.wav, reader: "4446", person: Sample Ada, role: teach}
+    # "He felt a tremor run through the slender yellow figure in front of him"
+  - {file: 61-70968-0000.wav, reader: "61", person: Sample Ben, role: teach}
+    # "He began a confused complaint against the wizard who had vanished behind the curtain on the left"
+  - {file: 61-70968-0013.wav, reader: "61", person: Sample Ben, role: teach}
+    # "Before them fled the stroller and his three sons capless and terrified"
+  - {file: 61-70968-0025.wav, reader: "61", person: Sample Ben, role: teach}
+    # "Come to me men here here he raised his voice still louder"
+  - {file: 61-70968-0037.wav, reader: "61", person: Sample Ben, role: teach}
+    # "What is your name lording asked the little stroller presently"
+  - {file: 61-70968-0051.wav, reader: "61", person: Sample Ben, role: teach}
+    # "Beg me a room of the sheriff child quickly"
+  - {file: 61-70970-0003.wav, reader: "61", person: Sample Ben, role: teach}
+    # "If for a whim you beggar yourself i cannot stay you"
+  - {file: 4446-2275-0010.wav, reader: "4446", person: Sample Ada, role: waiting}
+    # "Alexander leaned forward and warmed his hands before the blaze"
+  - {file: 61-70970-0018.wav, reader: "61", person: Sample Ben, role: waiting}
+    # "The hours passed wearily by and movement could yet be heard about the hall"
+  - {file: 1580-141083-0004.wav, reader: "1580", person: null, role: waiting}
+    # "I had to read it over carefully as the text must be absolutely correct"
+  - {file: 4446-2275-0026.wav, reader: "4446", person: Sample Ada, role: waiting}
+    # "She closed her eyes and took a deep breath as if to draw in again the fragrance of those days"
+  - {file: 61-70970-0029.wav, reader: "61", person: Sample Ben, role: waiting}
+    # "From the blackness behind the light they heard a voice warrenton's"
+  - {file: 1580-141083-0026.wav, reader: "1580", person: null, role: waiting}
+    # "As a matter of fact he could not said soames for i entered by the side door"
+  - {file: 1580-141083-0046.wav, reader: "1580", person: null, role: waiting}
+    # "But i have occasionally done the same thing at other times"
+  - {file: 1580-141084-0015.wav, reader: "1580", person: null, role: waiting}
+    # "He impressed me as being a perfectly honest man"

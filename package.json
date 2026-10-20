@@ -1,0 +1,12 @@
+{
+  "name": "oread-web-checks",
+  "private": true,
+  "description": "Checks for Oread's pages only (nothing here ships in the image).",
+  "scripts": {
+    "lint": "eslint oread/web"
+  },
+  "devDependencies": {
+    "eslint": "10.11.0",
+    "eslint-plugin-es-x": "10.0.1"
+  }
+}

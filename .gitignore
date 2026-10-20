@@ -1,0 +1,49 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Voice data: clips, profiles and the review list are never committed, nor are accounts,
+# sign-ins and tokens. Only your Oread's own settings files are kept in development (private);
+# a release never ships anything in data/ (release.yaml).
+data/*
+!data/.keep
+!data/settings.yaml
+!data/devices.yaml
+!data/tuning.yaml
+!data/access.yaml
+
+# Private household test audio stays local
+tests/private/
+
+# Downloaded models (fetched at runtime, not shipped in the repo)
+models/*
+!models/.keep
+
+# The vault's encryption key
+keys/*
+!keys/.keep
+
+# Logs
+logs/*
+!logs/.keep
+*.log
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+build/
+dist/
+
+# Editors and OS
+.vscode/
+.idea/
+*.sublime-workspace
+.DS_Store
+
+# Web checks
+node_modules/

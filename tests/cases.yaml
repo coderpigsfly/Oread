@@ -1,0 +1,26 @@
+# Oread test cases. Run with: python3 tools/regress.py
+# Public audio only. Household clips go in tests/private/ (never in git).
+#
+# Each case gives audio (a WAV path relative to this folder) or silence: <seconds>,
+# and one or more checks (kept model-neutral, since models spell some words differently):
+#   expect:       the whole transcript (compared ignoring case and punctuation)
+#   expect_words: words that must appear
+#   expect_empty: true when nothing should be heard
+# reference: the exact words spoken, used by tools/bench.py to score each model.
+# convert: {rate, channels} resamples the clip first, to test other formats.
+
+cases:
+  - name: clear read speech (LibriSpeech sample)
+    audio: audio/librispeech-0.wav
+    expect_words: [observed, turning, away, her, eyes, certainly, old, portrait]
+    reference: "Well, I don't wish to see it any more, observed Phebe, turning away her eyes. It is certainly very like the old portrait."
+
+  - name: same clip at 48 kHz stereo
+    audio: audio/librispeech-0.wav
+    convert: {rate: 48000, channels: 2}
+    expect_words: [portrait, eyes, certainly]
+
+  - name: silence gives no words
+    silence: 2
+    expect_empty: true
+    reference: ""   # in the benchmark, any word heard here counts as an error

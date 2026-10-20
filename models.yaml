@@ -1,0 +1,165 @@
+# Models Oread can use: where each is downloaded from, which files it needs,
+# its license, and what to expect. Pages and settings choose from this list.
+#
+# Don't edit this file (updates replace it). Change model settings and the
+# default models on the Settings page (Models tab), which saves them in
+# data/models.yaml. To add a model, put its entry there, same layout: a new
+# name is added, and a shipped name changes only what it names. Models are
+# downloaded the first time they're used, never shipped with Oread.
+#
+# memory_mb: memory it takes once loaded, measured on an Intel Xeon (2.8 GHz).
+# notes: what to expect, in plain words; shown on the pages.
+# settings: the model's starting settings. A device's type, the device itself,
+#   or the Settings page can change them for one device; a model listed
+#   without settings starts from the default model's.
+
+# The models a device uses unless its type or the device chooses another.
+# vad is the voice detector tools/client.py uses on your computer.
+defaults:
+  speech: moonshine-base-en-int8
+  voice: titanet-small
+  vad: silero-vad
+
+speech:            # turns speech into words (sherpa-onnx offline recognizers)
+  moonshine-base-en-int8:
+    label: Moonshine
+    kind: moonshine          # how sherpa-onnx loads it: moonshine, transducer, nemo_transducer or whisper
+    url: https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-moonshine-base-en-int8.tar.bz2
+    folder: sherpa-onnx-moonshine-base-en-int8     # folder inside the archive
+    files:                                         # role -> file inside that folder
+      preprocessor: preprocess.onnx
+      encoder: encode.int8.onnx
+      uncached_decoder: uncached_decode.int8.onnx
+      cached_decoder: cached_decode.int8.onnx
+      tokens: tokens.txt
+    languages: [en]
+    author: Useful Sensors
+    license: MIT
+    card: https://github.com/usefulsensors/moonshine
+    memory_mb: 380
+    notes: Fast and accurate on household commands.
+    settings:
+      num_threads: 4           # CPU threads one request may use
+
+  parakeet-tdt-0.6b-v2-int8:
+    label: Parakeet
+    kind: nemo_transducer
+    url: https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-nemo-parakeet-tdt-0.6b-v2-int8.tar.bz2
+    folder: sherpa-onnx-nemo-parakeet-tdt-0.6b-v2-int8
+    files:
+      encoder: encoder.int8.onnx
+      decoder: decoder.int8.onnx
+      joiner: joiner.int8.onnx
+      tokens: tokens.txt
+    languages: [en]
+    author: NVIDIA
+    license: CC BY 4.0
+    card: https://huggingface.co/nvidia/parakeet-tdt-0.6b-v2
+    memory_mb: 810
+    notes: Most accurate in our tests; about twice the time and memory of Moonshine.
+    settings:
+      num_threads: 4           # CPU threads one request may use
+
+  zipformer-en-2023-06-26-int8:
+    label: Zipformer
+    kind: transducer
+    url: https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-zipformer-en-2023-06-26.tar.bz2
+    folder: sherpa-onnx-zipformer-en-2023-06-26
+    files:
+      encoder: encoder-epoch-99-avg-1.int8.onnx
+      decoder: decoder-epoch-99-avg-1.int8.onnx
+      joiner: joiner-epoch-99-avg-1.int8.onnx
+      tokens: tokens.txt
+    languages: [en]
+    author: k2-fsa / icefall
+    license: Apache 2.0
+    card: https://huggingface.co/Zengwei/icefall-asr-librispeech-zipformer-2023-05-15
+    memory_mb: 170
+    notes: Fastest and smallest; least accurate on household commands.
+    settings:
+      num_threads: 4           # CPU threads one request may use
+
+  whisper-small-en-int8:
+    label: Whisper small
+    kind: whisper
+    url: https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-whisper-small.en.tar.bz2
+    folder: sherpa-onnx-whisper-small.en
+    files:
+      encoder: small.en-encoder.int8.onnx
+      decoder: small.en-decoder.int8.onnx
+      tokens: small.en-tokens.txt
+    languages: [en]
+    author: OpenAI
+    license: MIT
+    card: https://github.com/openai/whisper
+    memory_mb: 950
+    notes: Much slower without a graphics card (about ten times Moonshine); large.
+    settings:
+      num_threads: 4           # CPU threads one request may use
+
+voice:             # tells voices apart (sherpa-onnx speaker embedding extractors)
+  titanet-small:
+    label: TitaNet small
+    url: https://github.com/k2-fsa/sherpa-onnx/releases/download/speaker-recongition-models/nemo_en_titanet_small.onnx
+    file: nemo_en_titanet_small.onnx    # saved as models/speaker/<file>
+    author: NVIDIA
+    license: Apache 2.0 (NeMo toolkit license)
+    card: https://catalog.ngc.nvidia.com/orgs/nvidia/teams/nemo/models/titanet_small
+    memory_mb: 40
+    notes: Told every voice apart in our tests.
+    settings:
+      num_threads: 1
+      unknown_below: 0.35      # a best match below this: unknown
+      match_above: 0.55        # at or above this: that person; in between: maybe
+      phrase_from: 0.45        # in this range, habit phrases may settle a maybe
+      phrase_to: 0.55
+
+  campplus-en:
+    label: CAM++
+    url: https://github.com/k2-fsa/sherpa-onnx/releases/download/speaker-recongition-models/3dspeaker_speech_campplus_sv_en_voxceleb_16k.onnx
+    file: 3dspeaker_speech_campplus_sv_en_voxceleb_16k.onnx
+    author: 3D-Speaker (Alibaba)
+    license: Apache 2.0
+    card: https://www.modelscope.cn/models/iic/speech_campplus_sv_en_voxceleb_16k
+    memory_mb: 40
+    notes: Named a stranger as someone it knew in our tests; not recommended.
+    settings:                  # TitaNet's values for now; not tuned for this model yet
+      num_threads: 1
+      unknown_below: 0.35      # a best match below this: unknown
+      match_above: 0.55        # at or above this: that person; in between: maybe
+      phrase_from: 0.45        # in this range, habit phrases may settle a maybe
+      phrase_to: 0.55
+
+  wespeaker-resnet34:
+    label: WeSpeaker ResNet34
+    url: https://github.com/k2-fsa/sherpa-onnx/releases/download/speaker-recongition-models/wespeaker_en_voxceleb_resnet34_LM.onnx
+    file: wespeaker_en_voxceleb_resnet34_LM.onnx
+    author: WeSpeaker
+    license: CC BY 4.0 (as its training data, VoxCeleb)
+    card: https://github.com/wenet-e2e/wespeaker/blob/master/docs/pretrained.md
+    memory_mb: 60
+    notes: Got every voice right in our tests, but kept voices closer together than TitaNet.
+    settings:                  # TitaNet's values for now; not tuned for this model yet
+      num_threads: 1
+      unknown_below: 0.35      # a best match below this: unknown
+      match_above: 0.55        # at or above this: that person; in between: maybe
+      phrase_from: 0.45        # in this range, habit phrases may settle a maybe
+      phrase_to: 0.55
+
+vad:               # tells speech from silence: tools/client.py on your computer, and devices that
+                   # trim the quiet after speech (trim_silence) here
+  silero-vad:
+    label: Silero VAD
+    kind: silero             # how sherpa-onnx loads it (silero is the only kind so far)
+    url: https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/silero_vad.onnx
+    file: silero_vad.onnx    # saved as models/silero_vad.onnx
+    author: Silero
+    license: MIT
+    card: https://github.com/snakers4/silero-vad
+    notes: Small (about 0.6 MB) and quick; tells speech from fans, hum and mic hiss.
+    settings:
+      threshold: 0.1               # how sure it must be that a moment is speech (0 to 1); low, so
+                                   #   quiet speech is never taken for silence
+      min_silence_duration: 0.25   # seconds of quiet that count as a pause
+      min_speech_duration: 0.25    # seconds of sound that count as speech
+      keep_after_speech: 0.6       # seconds kept after the last speech when trimming

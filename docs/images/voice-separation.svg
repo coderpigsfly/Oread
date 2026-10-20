@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" width="720" height="420" role="img" aria-labelledby="t d">
+<title id="t">Telling voices apart with TitaNet small</title>
+<desc id="d">Lowest score for the right person rises from 0.31 at 1 second of speech to 0.66 at 3 seconds; the highest score for anyone else stays between 0.29 and 0.41. Oread names a person at 0.55 and calls a voice unknown below 0.35, so clips of 2 seconds or more are reliable.</desc>
+<style>
+  .bg { fill: #fcfcfb; } .ink { fill: #0b0b0b; } .ink2 { fill: #52514e; }
+  .grid { stroke: #e4e3df; } .axis { stroke: #b9b8b2; }
+  .s1 { fill: #2a78d6; stroke: #2a78d6; } .s2 { fill: #eb6834; stroke: #eb6834; }
+  .rule { stroke: #8a8984; }
+  @media (prefers-color-scheme: dark) {
+    .bg { fill: #1a1a19; } .ink { fill: #f0efec; } .ink2 { fill: #c3c2b7; }
+    .grid { stroke: #2e2e2c; } .axis { stroke: #55554f; }
+    .s1 { fill: #3987e5; stroke: #3987e5; } .s2 { fill: #d95926; stroke: #d95926; }
+    .rule { stroke: #8f8e88; }
+  }
+  .line { fill: none; }   /* after the dark colours, so a line is never filled */
+  text { font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+</style>
+<rect class="bg" width="720" height="420" rx="8"/>
+<text class="ink" x="70" y="30" font-size="17" font-weight="600">Telling voices apart (TitaNet small): longer clips separate better</text>
+<text class="ink2" x="70" y="50" font-size="13">Worst cases on public LibriSpeech voices, by how long the person spoke.</text>
+<line class="grid" x1="70" x2="520" y1="360.0" y2="360.0"/>
+<text class="ink2" x="62" y="364.0" font-size="12" text-anchor="end">0.0</text>
+<line class="grid" x1="70" x2="520" y1="302.0" y2="302.0"/>
+<text class="ink2" x="62" y="306.0" font-size="12" text-anchor="end">0.2</text>
+<line class="grid" x1="70" x2="520" y1="244.0" y2="244.0"/>
+<text class="ink2" x="62" y="248.0" font-size="12" text-anchor="end">0.4</text>
+<line class="grid" x1="70" x2="520" y1="186.0" y2="186.0"/>
+<text class="ink2" x="62" y="190.0" font-size="12" text-anchor="end">0.6</text>
+<line class="grid" x1="70" x2="520" y1="128.0" y2="128.0"/>
+<text class="ink2" x="62" y="132.0" font-size="12" text-anchor="end">0.8</text>
+<line class="grid" x1="70" x2="520" y1="70.0" y2="70.0"/>
+<text class="ink2" x="62" y="74.0" font-size="12" text-anchor="end">1.0</text>
+<text class="ink2" x="115.0" y="380" font-size="12" text-anchor="middle">1 s</text>
+<text class="ink2" x="205.0" y="380" font-size="12" text-anchor="middle">1.5 s</text>
+<text class="ink2" x="295.0" y="380" font-size="12" text-anchor="middle">2 s</text>
+<text class="ink2" x="475.0" y="380" font-size="12" text-anchor="middle">3 s</text>
+<line class="axis" x1="70" x2="520" y1="360" y2="360"/>
+<text class="ink2" x="295" y="408" font-size="12" text-anchor="middle">Length of speech in the clip</text>
+<text class="ink2" x="18" y="215" font-size="12" text-anchor="middle" transform="rotate(-90 18 215)">Match score</text>
+<line class="rule" x1="70" x2="520" y1="200.5" y2="200.5" stroke-dasharray="5 4" stroke-width="1.5"/>
+<text class="ink2" x="528" y="204.5" font-size="12">Person named at 0.55</text>
+<line class="rule" x1="70" x2="520" y1="258.5" y2="258.5" stroke-dasharray="5 4" stroke-width="1.5"/>
+<text class="ink2" x="528" y="262.5" font-size="12">Unknown below 0.35</text>
+<polyline class="s1 line" points="115.0,270.1 205.0,238.2 295.0,186.0 475.0,168.6" stroke-width="2"/>
+<circle class="s1" cx="115.0" cy="270.1" r="5"/>
+<circle class="s1" cx="205.0" cy="238.2" r="5"/>
+<circle class="s1" cx="295.0" cy="186.0" r="5"/>
+<circle class="s1" cx="475.0" cy="168.6" r="5"/>
+<text class="ink" x="465.0" y="156.6" font-size="13" font-weight="600" text-anchor="end">Right person, lowest</text>
+<polyline class="s2 line" points="115.0,246.9 205.0,261.4 295.0,241.1 475.0,275.9" stroke-width="2"/>
+<circle class="s2" cx="115.0" cy="246.9" r="5"/>
+<circle class="s2" cx="205.0" cy="261.4" r="5"/>
+<circle class="s2" cx="295.0" cy="241.1" r="5"/>
+<circle class="s2" cx="475.0" cy="275.9" r="5"/>
+<text class="ink" x="465.0" y="297.9" font-size="13" font-weight="600" text-anchor="end">Anyone else, highest</text>
+</svg>

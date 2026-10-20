@@ -1,0 +1,84 @@
+# Oread settings. Edit, then restart the container.
+#
+# Your own changes are best kept in data/settings.yaml, holding only what you
+# change (same layout as this file). It's applied on top of this one, and
+# this file stays as in git, so pulling updates never conflicts with them.
+#
+# A device's settings start from its models' own settings (models.yaml), then
+# three levels follow, each overriding only what it names:
+#   defaults      -> every device
+#   device types  -> every device of that type (say, all Voice PEs); the types
+#                    are in device-types.yaml, and yours in data/device-types.yaml
+#   devices       -> one device; each listens on its own port, which is how
+#                    Oread knows which device it is hearing.
+# Point each device's client (Home Assistant, for example) at that device's port.
+
+server:
+  host: 0.0.0.0
+  max_concurrent: 2     # requests decoded at the same moment; more wait in line
+  port_range: [10310, 10339]   # ports devices may use; must match the ports line in docker-compose.yml
+  allowed_clients: []   # clients permitted on the listening ports, e.g. [192.168.1.50, 192.168.1.61];
+                        # empty = any local-network address, none from the internet.
+                        # Usually set on the Connections page instead.
+
+api:
+  port: 10311           # Oread's pages: https://<server>:10311/  (API page: /docs)
+  tls: household        # household (Oread's own certificate; install /ca.crt on each device),
+                        #   files (cert_file + key_file from Let's Encrypt, Tailscale...), or
+                        #   off (plain HTTP, only behind a reverse proxy that does HTTPS)
+  tls_names: []         # the server's address and name for the household certificate,
+                        #   e.g. [192.168.1.20, myserver]
+  cert_file: ""         # with tls: files
+  key_file: ""
+
+# Home Assistant: each clip records its device's settings there (microphone volume, wake word
+# sensitivity...; match each device on Settings, Devices), and, for devices with publish_speaker
+# on, Oread sets sensor.oread_<device>_speaker before each reply. Leave url empty to skip both.
+# The long-lived access token goes in the vault (PUT /vault/home-assistant).
+home_assistant:
+  url: ""               # e.g. http://192.168.1.50:8123
+  token_key: home-assistant
+  timeout_s: 0.5        # never hold up a reply longer than this
+
+# Wepwawet Veil, the house router (optional): Oread pulls the mishearings it keeps (what
+# speech-to-text heard, under what was really said, with the clip each was heard in) on the
+# Mishearings page. url: the router's chat door; empty = off, and Oread stands alone. The router
+# makes the token (Security, API keys, the oread door); it goes in the vault (PUT /vault/wepwawet).
+wepwawet:
+  url: ""               # e.g. http://192.168.1.20:8770 (or set it on the Mishearings page)
+  token_key: wepwawet
+  timeout_s: 10         # a pull is a button press, never on a reply's path
+
+review:
+  max_unassigned: 200   # newest unassigned clips kept for review; older ones are deleted
+
+# How every device behaves, whatever its models. The models themselves, and
+# their own settings (threads, match thresholds), are in models.yaml and on the
+# Settings page (Models tab); a device type or a device can still choose others.
+defaults:
+  stt:
+    trim_silence: false             # before speech-to-text: skip a clip with no speech, and cut the
+                                    #   quiet after the last speech (the voice detector, models.yaml);
+                                    #   voice ID and the saved clip always get the whole clip
+  speaker:
+    min_training_seconds: 2         # shorter clips are matched but can't be assigned
+    phrase_mode: shadow             # off | shadow (note what phrases would decide) | on
+    publish_speaker: false          # set the Home Assistant sensor (if home_assistant.url is set);
+                                    #   off for devices the intent router serves
+
+# The starting device list. Once a device is added, renamed or removed on the
+# Devices page, data/devices.yaml takes over (delete that file to come back here).
+devices:
+  laptop:    {type: laptop,   port: 10310}
+  voice-pe:  {type: voice-pe, port: 10312}
+  tablet:    {type: android,  port: 10313}
+
+paths:
+  models: models   # downloaded models (never in git)
+  data: data       # voice data: clips, profiles, people, accounts (never in git)
+  logs: logs       # requests.jsonl: one line per request with its resource cost
+  keys: keys       # the vault's encryption key (never in git; back it up apart from data/)
+
+logging:
+  level: INFO
+  keep_requests: 10000   # newest lines kept in logs/requests.jsonl (about 6 MB); 0 = keep all

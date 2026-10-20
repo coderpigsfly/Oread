@@ -1,0 +1,34 @@
+# The lines an assistant's text-to-speech voice says so Oread can learn it (the patch for a device
+# that hears its own speaker). One per line; # starts a note. Put your own in data/voice_lines.txt
+# to use those instead (her usual answers work well). The first 20 are Harvard sentences (IEEE 1969,
+# public domain), chosen to cover the sounds of English.
+The birch canoe slid on the smooth planks.
+Glue the sheet to the dark blue background.
+It's easy to tell the depth of a well.
+These days a chicken leg is a rare dish.
+Rice is often served in round bowls.
+The juice of lemons makes fine punch.
+The box was thrown beside the parked truck.
+The hogs were fed chopped corn and garbage.
+Four hours of steady work faced us.
+A large size in stockings is hard to sell.
+The boy was there when the sun rose.
+A rod is used to catch pink salmon.
+The source of the huge river is the clear spring.
+Kick the ball straight and follow through.
+Help the woman get back to her feet.
+A pot of tea helps to pass the evening.
+Smoky fires lack flame and heat.
+The soft cushion broke the man's fall.
+The salt breeze came across from the sea.
+The girl at the booth sold fifty bonds.
+Good morning. It's sunny and seventy two degrees, with a light breeze from the west.
+I've added that to your list. Is there anything else?
+The washer is still running. It should finish in about twenty minutes.
+Your next chore is to take out the trash, due this evening.
+Sorry, I didn't catch that. Could you say it again?
+All the windows are closed and the front door is locked.
+Here is what happened on this day in history.
+Done. I've marked it as complete.
+The living room lights are off now.
+Tomorrow looks cloudy with a chance of rain in the afternoon.

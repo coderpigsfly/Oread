@@ -1,0 +1,16 @@
+# Oread's direct dependencies. The Docker image installs requirements.txt,
+# which is generated from this file and pins every package exactly.
+# Regenerate after editing here: tools/lock.sh
+#
+# PINNED exactly: changing these can change what Oread hears or how Home
+# Assistant talks to it. Upgrade on purpose, then run regress.py and bench.py.
+sherpa-onnx==1.13.8   # runs every model; a new version can change transcripts and voiceprints
+wyoming==1.10.2       # the protocol clients speak
+
+# RANGED: any compatible release is fine; the lock file records the exact one.
+numpy>=2.0,<3
+pyyaml>=6.0,<7
+fastapi>=0.115,<1     # the API and its /docs page
+uvicorn>=0.30,<1      # serves the API
+cryptography>=44,<51  # encrypts the vault (keys Oread uses to reach other programs)
+websockets>=13,<17   # reads Home Assistant's voice pipelines (its websocket API), for an assistant's own voice

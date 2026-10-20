@@ -1,0 +1,23 @@
+# Kinds of listening device Oread ships with, as examples. Don't edit this file:
+# add your own on the Devices page (Add a type), or in data/device-types.yaml,
+# same layout. Yours are applied on top, so `git pull` never overwrites them.
+#
+# Each type: a short name (what devices.yaml and the API use), a label people
+# read, an optional note, and optional starting settings for every device of
+# that type, in the same stt / speaker sections as settings.yaml, for example:
+#
+#   kitchen-speaker:
+#     label: Kitchen speaker
+#     stt: {model: parakeet-tdt-0.6b-v2-int8}
+#     speaker: {model: titanet-small}
+
+types:
+  voice-pe:
+    label: Home Assistant Voice PE
+    note: A small satellite speaker with a far-field microphone.
+  android:
+    label: Android tablet
+    note: A tablet running a Wyoming satellite app.
+  laptop:
+    label: Laptop or desktop
+    note: A computer's microphone, for trying Oread out and testing.

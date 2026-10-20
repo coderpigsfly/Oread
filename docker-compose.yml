@@ -1,0 +1,17 @@
+services:
+  oread:
+    build: .
+    container_name: oread
+    restart: unless-stopped
+    # run as your own user, not root, so the folders below stay yours to edit.
+    # 1000 is the first user on most Linux machines; check with `id -u` and `id -g`,
+    # and if yours differ, copy .env.example to .env and set them there.
+    user: "${OREAD_UID:-1000}:${OREAD_GID:-1000}"
+    ports:
+      - "10310-10339:10310-10339"   # one port per device (server.port_range), plus the API page on 10311
+    volumes:
+      - ./settings.yaml:/app/settings.yaml:ro
+      - ./models:/app/models   # downloaded on first start, kept between rebuilds
+      - ./data:/app/data       # voice data, people, accounts, your settings (data/settings.yaml)
+      - ./logs:/app/logs       # request, audit and resource logs
+      - ./keys:/app/keys       # the vault key and the household certificate; back up apart from data/
