@@ -5,7 +5,7 @@ data/ospri/records.jsonl: when, the device, who spoke (the voice ID's label and 
 voice models, what was heard, how long, and the clip it was heard in. The records aren't the review
 list's clips: they stay when a clip is trimmed. An export joins in what was meant, from the mishearings
 pulled from the house router (by the clip, else by the words heard), so each record says whether it was
-misheard and what was really said. The analysis, and corrections fed back from it, come in 1.1.0.
+misheard and what was really said. The analysis, and corrections fed back from it, come in a later version.
 """
 
 from __future__ import annotations

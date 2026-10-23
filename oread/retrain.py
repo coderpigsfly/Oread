@@ -131,7 +131,26 @@ class Retrain:
             row["in_trial"] = pending is not None and c["id"] in pending["clips"]
             rows.append(row)
         return {"device": device, "person": person, "model": model, "clips": rows[::-1],
-                "accepted": accepted, "pending": pending, "period": self.period(device)}
+                "accepted": accepted, "pending": pending, "period": self.period(device),
+                "waiting": self.waiting(device, person, model), "assistants": sorted(self.store.assistant_names())}
+
+    def waiting(self, device: str, person: str, model: str, most: int = 100) -> list[dict]:
+        """The device's clips nobody is assigned to, closest to the person first (dev-oread #6): each with the
+        call it got when heard, the two closest voices now (the device's voiceprints as today, the assistants'
+        own voices among them) and the person's own score, so they can be assigned without leaving Retrain.
+        A voice like an assistant's (Nora and Wren's) shows up here either way."""
+        today = {**self.store.centroids(model), **self.overrides(device, model)}
+        rows = []
+        for c in self.store.voiced(model, device):
+            if c["profile"] is not None:
+                continue
+            scores = sorted(((n, float(np.dot(v, c["vector"]))) for n, v in today.items()), key=lambda x: -x[1])
+            row = {k: v for k, v in c.items() if k not in _BULKY}
+            row["closest"] = [{"name": n, "score": round(s, 3)} for n, s in scores[:2]]
+            row["person_score"] = round(dict(scores)[person], 3) if person in dict(scores) else None
+            rows.append(row)
+        rows.sort(key=lambda r: -1.0 if r["person_score"] is None else -r["person_score"])
+        return rows[:most]
 
     def start(self, device: str, person: str, model: str, clip_ids: list[str], why: str | None,
               who: str | None) -> dict:

@@ -62,7 +62,7 @@ def stand_in_router():
     import threading
     from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
-    grid = [{"person": "Master", "names": ["Master"]}]
+    grid = [{"person": "Chief", "names": ["Chief"]}]
 
     class Door(BaseHTTPRequestHandler):
         def _json(self, code, body):
@@ -250,7 +250,7 @@ def run_engine(p, engine: str, code: str | None, check: Checks) -> None:
             expect(page.locator("#router")).to_contain_text("in the vault as wepwawet")
             # people in step: Oread's people beside the router's, the missing ones added
             people = page.locator("details", has=page.get_by_role("heading", name="People", exact=True))
-            expect(people).to_contain_text("Master")
+            expect(people).to_contain_text("Chief")
             people.get_by_label("Keep people in step").check()
             expect(people.get_by_label("Keep people in step")).to_be_checked()
             page.goto(BASE + "/ui/#/mishearings")
@@ -467,6 +467,11 @@ def run_engine(p, engine: str, code: str | None, check: Checks) -> None:
             page.get_by_label("Device").select_option(device)
             row = page.locator("tr.clip").first
             expect(row).to_contain_text("Take back")
+            expect(page.locator(".retrain-waiting")).to_contain_text("Waiting on " + device)   # #6: assign without leaving
+            waiting = page.locator(".retrain-waiting tr.clip")
+            if waiting.count():
+                expect(waiting.first.get_by_label("Assign this clip to").locator("option").first).to_have_text("Phoebe")
+                expect(waiting.first.get_by_label("Assign this clip to")).to_contain_text("Not a person")
             page.get_by_role("button", name="When").click()                       # the table sorts
             expect(page.locator("th[aria-sort]").filter(has_text="When")).to_have_attribute("aria-sort", "ascending")
             page.get_by_role("button", name="Tick all").click()
@@ -771,7 +776,8 @@ def run_engine(p, engine: str, code: str | None, check: Checks) -> None:
 
         def api_description_says_how_it_fits_the_router():
             w = page.evaluate("async () => (await (await fetch('/openapi.json', {credentials: 'same-origin'})).json())['x-wepwawet']")
-            assert w and w["version"] == 1 and w["tabs"]["voice_map"] is False, w
+            assert w and w["version"] == 2 and w["tabs"]["voice_map"] is False and w["spoken"] == "Oread", w
+            assert w["data"]["kind"] == "record" and w["hears"]["range"] == "human voice", w
             assert "who_spoke" in w["offers"] and w["lists"]["people"]["from"] == "GET /profiles", w
             paths = page.evaluate("async () => Object.keys((await (await fetch('/openapi.json', {credentials: 'same-origin'})).json()).paths)")
             assert "/profiles" in paths, paths                 # its people list is one of its own commands

@@ -1,12 +1,18 @@
 """How Oread fits Wepwawet Veil, the house router: its x-wepwawet section (the Wepwawet standard,
-version 1, in the router's docs/wepwawet-standard.md). It's added to Oread's OpenAPI document
+version 2: github.com/coderpigsfly/wepwawet_standard). It's added to Oread's OpenAPI document
 (/openapi.json), so the router lays Oread out from Oread's own description, not from its code.
 It describes Oread itself, so it lives with Oread's code rather than in its settings."""
 
 WEPWAWET = {
-    "version": 1,
+    "version": 2,
     "title": "Oread",
+    "spoken": "Oread",                 # what it's called out loud (expectation 1)
     "role": "speech",
+    # its people are kept by Oread itself (expectation 15): read them live
+    "data": {"kind": "record"},
+    # the sound it takes in (expectation 16): the human voice today. The range it moves to, and the
+    # acoustic types it handles there, are added when they're set (dev-house-router #23)
+    "hears": {"range": "human voice", "path": ["airborne"]},
     "tabs": {"commands": True, "voice_map": False, "clean_up": False, "lists": True, "options": True},
     "auth": {"in": "header", "name": "Authorization", "prefix": "Bearer "},
     "offers": {

@@ -4,7 +4,7 @@
 #   python3 tools/release.py            publish (asks first)
 # Public at github.com/coderpigsfly/oread.
 
-version: 1.0.1            # the next public release; tagged v1.0.1 there, release-v1.0.1 here
+version: 2026.10.0        # the next public release (year.month.release); tagged v2026.10.0 there, release-v2026.10.0 here
 public: git@github.com:coderpigsfly/oread.git   # the public repo
 branch: main              # the public repo's branch
 email: 20612498+coderpigsfly@users.noreply.github.com   # the public commits' email (GitHub's noreply: your own stays private)

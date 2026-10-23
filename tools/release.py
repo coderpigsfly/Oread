@@ -18,6 +18,7 @@
 
 import fnmatch
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -42,8 +43,19 @@ def load():
         sys.exit("No release.yaml here: it says what's published (see tools/release.py).")
     with open(path) as f:
         spec = yaml.safe_load(f) or {}
-    if not str(spec.get("version") or "").strip():
-        sys.exit("release.yaml has no version: (like 1.0.0).")
+    version = str(spec.get("version") or "").strip()
+    if not version:
+        sys.exit("release.yaml has no version: (like 2026.10.0).")
+    if not re.fullmatch(r"20\d\d\.(?:[1-9]|1[0-2])\.\d+", version):
+        sys.exit(f"release.yaml's version {version} isn't year.month.release (like 2026.10.0).")
+    with open(os.path.join(REPO, "oread", "__init__.py")) as f:
+        found = re.search(r"""^__version__\s*=\s*["']([^"']+)["']""", f.read(), re.M)
+    if not found or found.group(1) != version:
+        sys.exit(f"oread/__init__.py's __version__ ({found.group(1) if found else 'none'}) isn't release.yaml's {version}: "
+                 "make them the same.")
+    changelog = os.path.join(REPO, "CHANGELOG.md")
+    if not os.path.exists(changelog) or f"## {version}" not in open(changelog).read():
+        sys.exit(f"CHANGELOG.md has no section for {version} (## {version}): say what changed first.")
     return spec
 
 

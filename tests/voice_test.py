@@ -98,7 +98,7 @@ class Vault:
 
 tmp = Path(tempfile.mkdtemp(prefix="oread-voice-"))
 store = Store(tmp)
-store.create_profile("Master")
+store.create_profile("Chief")
 ha = HomeAssistant({"url": f"http://127.0.0.1:{rest.server_port}"}, Vault())
 ha.pipelines = HomeAssistant({"url": f"http://127.0.0.1:{ws_port}"}, Vault()).pipelines   # its websocket elsewhere here
 rebuilt = []
@@ -131,7 +131,7 @@ case("Their voiceprints rebuilt once; the view says which and that they're new",
      (len(rebuilt), sorted(v["new"] for v in view["last"]["voices"]), view["last"]["error"], view["learning"]),
      (1, [True, True], None, False))
 case("A made line never waits on the Learn page, and it isn't a person for the router",
-     (len(store.clips("unassigned")), [p["name"] for p in store.profiles(everyone=False)]), (0, ["Master"]))
+     (len(store.clips("unassigned")), [p["name"] for p in store.profiles(everyone=False)]), (0, ["Chief"]))
 
 SAID.clear()
 again = voices.learn_all()
@@ -175,7 +175,7 @@ def heard(device, seconds=2.5, vec=(0, 1, 0)):
 
 
 e1, e2, e3, e4, e5 = heard("voice-pe"), heard("voice-pe"), heard("voice-pe", 1.0), heard("tablet"), heard("laptop")
-store.assign(e2, "Master")
+store.assign(e2, "Chief")
 echoes = [{"clip": e1, "device": "voice-pe", "by": "words"}, {"clip": e2, "device": "voice-pe", "by": "words"},
           {"clip": e3, "device": "voice-pe", "by": "words"}, {"clip": e4, "device": "tablet", "by": "voice"},
           {"clip": e5, "device": "laptop", "by": "words"}, {"clip": "gone-voice-pe", "device": "voice-pe", "by": "words"}]
@@ -221,14 +221,14 @@ clips = [
      "profile": None, "result": {"label": "known", "speaker": "Ann", "score": 0.71},
      "measures": {"speech_db": -17.3, "noise_db": -36.7}, "heard_with": {"stt_model": "parakeet"}},
     {"id": "c2", "time": "2026-10-18T10:00:00+00:00", "device": "tablet", "transcript": "Good morning", "audio_s": 1.1,
-     "profile": "Master", "result": {"label": "maybe", "guess": "Master", "score": 0.4, "own_voice": False}},
+     "profile": "Chief", "result": {"label": "maybe", "guess": "Chief", "score": 0.4, "own_voice": False}},
     {"id": "m1", "time": "2026-10-18T10:00:00+00:00", "device": "tts", "transcript": "Made", "audio_s": 2.0, "profile": "x",
      "made": {"engine": "tts.piper"}, "result": {}},
 ]
 mis = [{"said": "Is the watch a runny?", "meant": "Is the washer running?", "count": 2, "clips": [{"clip": "c1", "device": "voice-pe"}]},
        {"said": "Read me my cat listen.", "meant": "Read me my task list.", "count": 1, "clips": []},
        {"said": "Never meant", "clips": []}]
-out = explore.rows(clips, mis, {"voice-pe": "voice-pe"}, {"Master"})
+out = explore.rows(clips, mis, {"voice-pe": "voice-pe"}, {"Chief"})
 c1 = out["clips"][0]
 case("Explore: one row per clip heard (not the made lines), with its fields",
      ([r["clip"] for r in out["clips"]], {k: c1[k] for k in ("Device", "Device type", "Speaker", "Assigned", "Voice ID",
@@ -237,7 +237,7 @@ case("Explore: one row per clip heard (not the made lines), with its fields",
                      "Speech over noise dB": 19.4, "Misheard": "yes", "meant": "Is the washer running?", "Words": 5}))
 case("Explore: an assigned clip is its person's; no mishearing: not flagged",
      {k: out["clips"][1][k] for k in ("Speaker", "Speaker is", "Device type", "Misheard", "Speech dB")},
-     {"Speaker": "Master", "Speaker is": "assistant's voice", "Device type": "none", "Misheard": "not flagged", "Speech dB": None})
+     {"Speaker": "Chief", "Speaker is": "assistant's voice", "Device type": "none", "Misheard": "not flagged", "Speech dB": None})
 case("Explore: each word of each mishearing with what was meant (a line with no meaning left out)",
      [(w["Kind"], w["Meant"], w["Heard"], w["Speaker"], w["Times"]) for w in out["words"]],
      [("right", "is", "is", "Ann", 2), ("right", "the", "the", "Ann", 2), ("swapped", "washer running", "watch a runny", "Ann", 2),

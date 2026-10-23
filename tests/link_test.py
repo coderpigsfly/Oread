@@ -29,22 +29,22 @@ def case(name, got, want):
 
 tmp = Path(tempfile.mkdtemp(prefix="oread-link-"))
 store = Store(tmp)
-store.create_profile("Master")
+store.create_profile("Chief")
 store.create_profile("Tablet voice", "assistant")
-v_master, v_her = np.array([1, 0, 0], dtype=np.float32), np.array([0, 1, 0], dtype=np.float32)
-store._centroids = {"m": {"Master": v_master, "Tablet voice": v_her}}
+v_chief, v_her = np.array([1, 0, 0], dtype=np.float32), np.array([0, 1, 0], dtype=np.float32)
+store._centroids = {"m": {"Chief": v_chief, "Tablet voice": v_her}}
 case("Profiles: people only for the router, an assistant's voice too for Oread's own pages",
      ([p["name"] for p in store.profiles(everyone=False)], [(p["name"], p["kind"]) for p in store.profiles()]),
-     (["Master"], [("Master", "person"), ("Tablet voice", "assistant")]))
+     (["Chief"], [("Chief", "person"), ("Tablet voice", "assistant")]))
 case("Her own voice, the device's patch on: known, marked own_voice",
      {k: store.match("m", v_her, 0.35, 0.55, own_voice=True).get(k) for k in ("speaker", "label", "own_voice")},
      {"speaker": "Tablet voice", "label": "known", "own_voice": True})
 case("The patch off: her voice is never matched (never a person)",
      store.match("m", v_her, 0.35, 0.55)["speaker"], None)
-case("A person, the patch on: no own-voice mark", store.match("m", v_master, 0.35, 0.55, own_voice=True).get("own_voice"), None)
+case("A person, the patch on: no own-voice mark", store.match("m", v_chief, 0.35, 0.55, own_voice=True).get("own_voice"), None)
 
 # a stand-in router: GET and POST /people/oread
-GRID = [{"person": "Master", "names": ["Master"]}]
+GRID = [{"person": "Chief", "names": ["Chief"]}]
 SEEN = []
 
 
@@ -83,16 +83,16 @@ class Vault:
 
 
 link = Mishearings({"url": f"http://127.0.0.1:{srv.server_port}"}, Vault(), store, tmp)
-case("Kept in step only when switched on", link.person_changed("add", "Rachel"), None)
+case("Kept in step only when switched on", link.person_changed("add", "Ruth"), None)
 link.set_link({"people_sync": True, "nightly_pull": True, "pull_hour": 4})
 case("Switched on: an add is told to the router, with its token",
-     (link.person_changed("add", "Rachel"), SEEN[-1]), ("Rachel added to the people grid", ("add", "Rachel", None, "Bearer router-token")))
+     (link.person_changed("add", "Ruth"), SEEN[-1]), ("Ruth added to the people grid", ("add", "Ruth", None, "Bearer router-token")))
 case("The switches are kept (data/wepwawet.yaml) and read again at a start",
      Mishearings({}, Vault(), store, tmp).link, {"enabled": True, "people_sync": True, "nightly_pull": True, "pull_hour": 4})
 case("Oread's people beside the router's: here and at the router, and the router's not here",
-     link.people_view(["Master", "Ann"]), {"here": [{"name": "Ann", "at_router": None}, {"name": "Master", "at_router": "Master"}],
-                                             "only_at_router": ["Rachel"]})
-case("Add the missing ones", link.sync_people(["Master", "Ann"])["added"], ["Ann"])
+     link.people_view(["Chief", "Ann"]), {"here": [{"name": "Ann", "at_router": None}, {"name": "Chief", "at_router": "Chief"}],
+                                             "only_at_router": ["Ruth"]})
+case("Add the missing ones", link.sync_people(["Chief", "Ann"])["added"], ["Ann"])
 link.set_link({"enabled": False})
 case("Switched off: nothing told, nothing pulled", (link.person_changed("add", "Zed"), link.configured), (None, False))
 try:

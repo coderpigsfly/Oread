@@ -1286,8 +1286,8 @@ function personCard(person, canChange, reload) {
 
 function drawRetrain(main) {
   const canChange = can("profiles", true);
-  const state = { person: "", device: "", ticked: new Set(), view: null };
-  const sorts = { clips: { col: 2, down: true }, blind: { col: 1, down: true } };
+  const state = { person: "", device: "", ticked: new Set(), view: null, voices: false, people: [] };
+  const sorts = { clips: { col: 2, down: true }, blind: { col: 1, down: true }, waiting: { col: 4, down: true } };
   const personSel = h("select", { id: "rt-person" }, h("option", { value: "" }, "Pick a person"));
   const deviceSel = h("select", { id: "rt-device" }, h("option", { value: "" }, "Pick a device"));
   const why = h("input", { id: "rt-why", type: "text", autocomplete: "off", maxlength: 500,
@@ -1296,9 +1296,11 @@ function drawRetrain(main) {
   const status = h("p", { class: "quiet", role: "status" });
   const record = h("div", {});
   const table = h("div", {});
+  const waiting = h("div", {});
   const trial = h("div", {});
 
   Promise.all([api("/profiles"), api("/status")]).then(([people, st]) => {
+    state.people = people.map((p) => p.name);
     people.forEach((p) => personSel.append(h("option", { value: p.name }, p.name)));
     st.devices.forEach((d) => deviceSel.append(h("option", { value: d.name }, d.name)));
     const q = hashParams();
@@ -1321,6 +1323,7 @@ function drawRetrain(main) {
     error.textContent = "";
     record.replaceChildren();
     trial.replaceChildren();
+    waiting.replaceChildren();
     if (!state.person || !state.device) {
       table.replaceChildren(h("p", { class: "quiet" }, "Pick a person and a device to see the clips that train them there."));
       return;
@@ -1333,6 +1336,7 @@ function drawRetrain(main) {
       if (view.pending && !why.value) why.value = view.pending.why || "";
       drawRecord();
       drawClips();
+      drawWaiting();
       if (view.pending) await drawTrial();
     } catch (e) {
       table.replaceChildren();
@@ -1359,7 +1363,7 @@ function drawRetrain(main) {
     const v = state.view;
     if (!v.clips.length) {
       table.replaceChildren(h("p", { class: "empty-state" }, "No clips of " + v.person + " from " + v.device +
-        " yet. Assign some on the Learn page."));
+        " yet. Assign some from the waiting clips below."));
       return;
     }
     const count = h("span", { class: "quiet" });
@@ -1411,6 +1415,62 @@ function drawRetrain(main) {
       h("summary", {}, h("h3", {}, v.person + "'s clips on " + v.device + " (" + v.clips.length + ")")),
       tools, sortTable(columns, v.clips, sorts.clips, (c) => ({ class: "clip", "data-clip": c.id }))), "retrain:clips"),
       canChange ? h("div", { class: "row person-actions" }, run) : "");
+  }
+
+  // the device's clips nobody is assigned to, closest to the person first (#6): assigned here, without the
+  // Learn page. The assistants' own voices crowd the women's (Nora's clips and Wren's voice are close), so a
+  // clip whose closest voice is an assistant's is hidden unless the person is one of its two closest
+  function drawWaiting() {
+    const v = state.view;
+    const voices = new Set(v.assistants || []);
+    const named = (n) => (voices.has(n) ? n + " (assistant's voice)" : n);
+    const near = (c) => (c.closest || []).some((x) => x.name === v.person);
+    const herVoice = (c) => voices.has(((c.closest || [])[0] || {}).name) && !near(c);
+    const rows = (v.waiting || []).filter((c) => state.voices || !herVoice(c));
+    const hidden = (v.waiting || []).length - rows.length;
+    const assign = (c) => {
+      if (!can("clips", true)) return "";
+      // the choice, not always the person being retrained: the closest first, then the assistants' voices,
+      // everyone else, and not a person (noise, the TV: discarded)
+      const order = [v.person].concat((c.closest || []).map((x) => x.name), Array.from(voices), state.people);
+      const pick = h("select", { "aria-label": "Assign this clip to" },
+        Array.from(new Set(order)).map((n) => h("option", { value: n }, named(n))),
+        h("option", { value: "" }, "Not a person (discard it)"));
+      const go = h("button", { type: "button", onclick: (e) => {
+        const who = pick.value;
+        const run = async () => {
+          try {
+            if (who) await api("/clips/" + encodeURIComponent(c.id) + "/assign", { method: "POST", body: { profile: who } });
+            else await api("/clips/" + encodeURIComponent(c.id), { method: "DELETE" });
+            load();
+          } catch (err) { error.textContent = err.message; }
+        };
+        if (who) run(); else askFirst(e.currentTarget, "Discard this clip?", "Discard", run);
+      } }, "Assign");
+      return h("span", { class: "row assign" }, pick, go);
+    };
+    const columns = [
+      ["Play", (c) => c.audio_s, (c) => playButton("/clips/" + encodeURIComponent(c.id) + "/audio", c.audio_s)],
+      ["When", (c) => c.time, (c) => when(c.time)],
+      ["Words", (c) => c.transcript.toLowerCase(), (c) => h("p", { class: "words" }, "\u201C" + c.transcript + "\u201D")],
+      ["When heard", (c) => num(c.result && c.result.score), (c) => guessChip(c.result, "")],
+      [v.person + "'s score", (c) => (c.person_score === null ? -1 : c.person_score),
+        (c) => (c.person_score === null ? "" : c.person_score.toFixed(2))],
+      ["Closest now", (c) => ((c.closest || [])[0] || {}).name || "",
+        (c) => (c.closest || []).map((x) => named(x.name) + " " + x.score.toFixed(2)).join(", ")],
+      ["", null, assign],
+    ];
+    const show = h("label", { class: "check" }, h("input", { type: "checkbox", checked: state.voices,
+      onchange: (e) => { state.voices = e.target.checked; drawWaiting(); } }),
+      " Show the clips closest to an assistant's own voice" + (hidden ? " (" + hidden + " hidden)" : ""));
+    waiting.replaceChildren(foldable(h("details", { class: "fold retrain-waiting" },
+      h("summary", {}, h("h3", {}, "Waiting on " + v.device + ", closest to " + v.person + " first (" + rows.length + ")")),
+      h("p", { class: "quiet" }, "Clips nobody is assigned to yet. Play one, pick who it is, and Assign: it joins " +
+        "that person's clips above when it's " + v.person + ". A clip close to an assistant's voice may be an echo of her, " +
+        "or someone whose voice is near hers."),
+      voices.size ? show : "",
+      rows.length ? sortTable(columns, rows, sorts.waiting, (c) => ({ class: "clip", "data-clip": c.id }))
+        : h("p", { class: "empty-state" }, "Nothing waiting on " + v.device + ".")), "retrain:waiting"));
   }
 
   // the trial in one word, judged on the new sound only, with the numbers behind it
@@ -1509,7 +1569,7 @@ function drawRetrain(main) {
     h("div", { class: "knobs retrain-pick" },
       field("Person", personSel), field("Device", deviceSel),
       field("Why (optional)", why, "Kept with the retrain, as the record of what changed.")),
-    error, status, record, table, trial);
+    error, status, record, table, waiting, trial);
 }
 
 // ---------- Devices: what listens, and on which port ----------

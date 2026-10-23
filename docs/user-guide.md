@@ -655,7 +655,7 @@ stop matching: scores that were around 0.7 drop to around 0.35, and Oread says
 device its own voiceprint for that person, from clips heard since the change.
 
 1. Make the change on the device, speak a few normal requests to it, and
-   assign those clips to yourself on **Learn**.
+   assign those clips to yourself, on **Learn** or right on the Retrain page (step 3).
 2. **People**, **Retrain**: pick the **person** and the **device**, and, if you
    like, say **why** ("microphone gain up, noise suppression on"): it's kept as the
    record of what changed.
@@ -663,6 +663,15 @@ device its own voiceprint for that person, from clips heard since the change.
    a heading to sort). **Original** is the call Oread made when it heard the
    clip; it never changes. Tick the clips from after the change. A wrong clip?
    **Take back** puts it back to waiting; reassign it on Learn.
+   Below it, **Waiting on** the device lists the clips nobody is assigned to yet,
+   closest to the person first: what Oread called each when it was heard, the
+   person's score, and the two closest voices now. Play one, pick who it is
+   (the person first, then the closest voices, the assistants' own voices,
+   everyone else, or **Not a person** to discard it) and **Assign**: it joins that
+   person's clips without leaving the page. A clip whose closest voice is an
+   assistant's is hidden unless the person is one of its two closest: a woman's
+   voice and the assistant's can be near each other, and those mix-ups stay
+   in view. **Show the clips closest to an assistant's own voice** shows the rest.
 4. **Retrain** makes a trial voiceprint from the ticked clips. Nothing changes
    yet: Oread still decides as before, and requests on that device note what
    the trial would have said. **Trial** shows each clip's score with it (a
@@ -807,7 +816,7 @@ mishearings, how to correct what speech-to-text hears. The analysis is done outs
 - **Export CSV** or **Export JSON**: every record, each with whether it was misheard and what was
   meant, joined in from the mishearings pulled from the house router. Analyse them anywhere.
 
-Applying the corrections from that analysis (OSPRI lite) comes in version 1.1.0.
+Applying the corrections from that analysis (OSPRI lite) comes in a later version.
 
 ## 12. Back up
 

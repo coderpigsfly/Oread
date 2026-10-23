@@ -462,6 +462,16 @@ def check_retrain() -> list[str]:
                (named("today"), named("trial")))
         expect("the blind test's verdict on the new sound: better", blind["verdict"]["verdict"] == "better",
                blind["verdict"])
+        near, far = clip("kitchen", sound(new), None), clip("kitchen", sound(other), None)   # nobody assigned
+        shown = r.view("kitchen", "Ann", "m")["waiting"]
+        expect("Retrain shows the device's unassigned clips, closest to the person first (#6)",
+               [c["id"] for c in shown if c["id"] in (near, far)] == [near, far], [c["id"] for c in shown])
+        expect("...each with the two closest voices and the person's own score",
+               len(shown[0]["closest"]) == 2 and shown[0]["person_score"] is not None, shown[0].get("closest"))
+        expect("...and never an assigned clip", all(c["profile"] is None for c in shown))
+        store.assign(far, "Bo", me)
+        expect("assigned from there, it leaves the list", far not in [c["id"] for c in r.view("kitchen", "Ann", "m")["waiting"]])
+        store.discard(near)
         waiting = clip("kitchen", sound(new), None)    # heard before the accept, not assigned
         time.sleep(1.1)
         r.accept("kitchen", "Ann", "tester")

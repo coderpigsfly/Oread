@@ -162,6 +162,8 @@ walks through everything from install to connecting Home Assistant
   resource log, tests and library versions.
 - API: everything the pages do, as JSON, with an interactive page at
   `/docs` once you're signed in.
+- [Changelog](CHANGELOG.md): what changed in each version (year.month.release, like Home
+  Assistant: 2026.10.0).
 
 ## Important Reach Out
 One of our volunteer trainers speaks with an extreme lisp impediment. We thank you for your patience, tutelage and so glad you can now use a voice device.
